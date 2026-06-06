@@ -1,0 +1,217 @@
+############################################################
+# SmartDisplay for ESP32-CYD (ESPHome + LVGL)
+# Main file keeps system/hardware config and loads split files:
+# - secrets.yaml   (sensitive values)
+# - config.yaml   (substitutions)
+# - sensors.yaml  (sensor, binary_sensor, text_sensor)
+# - lvgl.yaml     (font, image, lvgl)
+# - scripts.yaml  (all scripts)
+############################################################
+
+substitutions: !include config.yaml
+
+esphome:
+  name: esp32-cyd
+  friendly_name: ESP32-CYD
+  on_boot:
+    priority: 600
+    then:
+      - lambda: |-
+          id(last_touch_ms) = millis();
+          id(display_dimmed) = false;
+      - light.turn_on:
+          id: back_light
+          brightness: !lambda "return atoi(\"${MAX_BRIGHTNESS}\") / 100.0f;"
+      - script.execute: ui_refresh
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+    advanced:
+      minimum_chip_revision: "3.1"
+      sram1_as_iram: true
+
+logger:
+
+# Credentials are loaded from secrets.yaml — copy secrets.yaml.example to secrets.yaml and fill in your values.
+api:
+  encryption:
+    key: !secret smartdisplay_api_key
+
+ota:
+  - platform: esphome
+    password: !secret ota_password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  ap:
+    ssid: "esp32-cyd"
+    password: !secret wifi_ap_password
+
+captive_portal:
+
+interval:
+  - interval: 1s
+    then:
+      - if:
+          condition:
+            lambda: |-
+              if (std::string("${AUTO_DIM}") != "true") return false;
+              if (id(display_dimmed)) return false;
+              return (millis() - id(last_touch_ms)) > (atoi("${AUTO_DIM_TIMEOUT}") * 1000UL);
+          then:
+            - script.execute: dim_display
+
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+    on_time:
+      - seconds: 0
+        minutes: /1
+        then:
+          - script.execute: ui_refresh
+
+      - seconds: 0
+        minutes: 0
+        hours: ${NIGHT_START_HOUR}
+        then:
+          - if:
+              condition:
+                lambda: 'return id(display_dimmed);'
+              then:
+                - script.execute: dim_display
+
+      - seconds: 0
+        minutes: 0
+        hours: ${NIGHT_END_HOUR}
+        then:
+          - if:
+              condition:
+                lambda: 'return id(display_dimmed);'
+              then:
+                - script.execute: dim_display
+
+globals:
+  - id: active_entity
+    type: std::string
+    restore_value: no
+
+  - id: active_control_kind
+    type: std::string
+    restore_value: no
+
+  - id: active_value_suffix
+    type: std::string
+    restore_value: no
+
+  - id: last_touch_ms
+    type: uint32_t
+    restore_value: no
+    initial_value: '0'
+
+  - id: display_dimmed
+    type: bool
+    restore_value: no
+    initial_value: 'false'
+
+  - id: active_label_off
+    type: std::string
+    restore_value: no
+
+  - id: active_label_on
+    type: std::string
+    restore_value: no
+
+  # true = device is home → screen operates normally; false = screen is blanked
+  - id: presence_home
+    type: bool
+    restore_value: no
+    initial_value: 'true'
+
+packages:
+  sensors_pack: !include sensors.yaml
+  ui_pack: !include lvgl.yaml
+  scripts_pack: !include scripts.yaml
+
+switch:
+  - platform: restart
+    name: "Restart"
+
+# Two SPI buses used by the CYD:
+# - tft: built-in display
+# - my_touchscreen: built-in touch controller
+spi:
+  - id: my_touchscreen
+    clk_pin: GPIO25
+    mosi_pin: GPIO32
+    miso_pin: GPIO39
+
+  - id: tft
+    clk_pin: GPIO14
+    mosi_pin: GPIO13
+    miso_pin:
+      number: GPIO12
+      ignore_strapping_warning: true
+
+output:
+  - platform: ledc
+    pin: GPIO21
+    id: gpio_backlight_pwm
+
+light:
+  - platform: monochromatic
+    output: gpio_backlight_pwm
+    name: "Power Display Backlight"
+    id: back_light
+    restore_mode: ALWAYS_ON
+
+# Touchscreen configuration (XPT2046)
+# IMPORTANT:
+# - calibration values are device-specific
+# - touchscreen.transform must match display.transform exactly
+touchscreen:
+  platform: xpt2046
+  id: ts_touch
+  spi_id: my_touchscreen
+  cs_pin: 33
+  interrupt_pin: 36
+  threshold: 300
+
+  calibration:
+    x_min: ${TOUCH_CAL_X_MIN}
+    x_max: ${TOUCH_CAL_X_MAX}
+    y_min: ${TOUCH_CAL_Y_MIN}
+    y_max: ${TOUCH_CAL_Y_MAX}
+
+  transform:
+    swap_xy: ${TOUCH_SWAP_XY}
+    mirror_x: ${TOUCH_MIRROR_X}
+    mirror_y: ${TOUCH_MIRROR_Y}
+
+  on_touch:
+    - lambda: |-
+        id(last_touch_ms) = millis();
+
+# Display configuration (ILI9341)
+display:
+  - platform: mipi_spi
+    id: my_display
+    spi_id: tft
+    model: ILI9341
+    cs_pin: 15
+    dc_pin: 2
+    invert_colors: false
+    update_interval: never
+    auto_clear_enabled: false
+
+    transform:
+      swap_xy: ${DISPLAY_SWAP_XY}
+      mirror_x: ${DISPLAY_MIRROR_X}
+      mirror_y: ${DISPLAY_MIRROR_Y}
+
+    dimensions:
+      width: ${DISPLAY_W}
+      height: ${DISPLAY_H}
+

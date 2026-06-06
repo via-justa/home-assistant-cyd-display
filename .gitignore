@@ -1,0 +1,15 @@
+# Build and generated artifacts
+/.esphome/
+
+# Local secrets
+/secrets.yaml
+/config.yaml
+
+# OS/editor files
+.DS_Store
+
+# Local backups and scratch files
+*.backup
+*.backup-*
+*.bak
+*.tmp

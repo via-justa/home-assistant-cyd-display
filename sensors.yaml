@@ -1,0 +1,217 @@
+sensor:
+  - platform: wifi_signal
+    name: "Wifi Signal"
+    update_interval: 600s
+
+  - platform: uptime
+    name: "Uptime"
+    id: uptime_s
+    update_interval: 15s
+
+  - platform: homeassistant
+    id: tile1_brightness
+    entity_id: ${TILE1_ENTITY}
+    attribute: brightness
+    on_value: { then: [ script.execute: ui_refresh ] }
+
+  - platform: homeassistant
+    id: tile1_percentage
+    entity_id: ${TILE1_ENTITY}
+    attribute: percentage
+    on_value: { then: [ script.execute: ui_refresh ] }
+
+  - platform: homeassistant
+    id: tile2_brightness
+    entity_id: ${TILE2_ENTITY}
+    attribute: brightness
+    on_value: { then: [ script.execute: ui_refresh ] }
+
+  - platform: homeassistant
+    id: tile2_percentage
+    entity_id: ${TILE2_ENTITY}
+    attribute: percentage
+    on_value: { then: [ script.execute: ui_refresh ] }
+
+  - platform: homeassistant
+    id: tile3_brightness
+    entity_id: ${TILE3_ENTITY}
+    attribute: brightness
+    on_value: { then: [ script.execute: ui_refresh ] }
+
+  - platform: homeassistant
+    id: tile3_percentage
+    entity_id: ${TILE3_ENTITY}
+    attribute: percentage
+    on_value: { then: [ script.execute: ui_refresh ] }
+
+  # Climate values: target setpoint and measured temperature
+  - platform: homeassistant
+    id: tile4_brightness
+    entity_id: ${TILE4_ENTITY}
+    attribute: temperature
+    on_value: { then: [ script.execute: ui_refresh ] }
+
+  - platform: homeassistant
+    id: tile4_percentage
+    entity_id: ${TILE4_ENTITY}
+    attribute: current_temperature
+    on_value: { then: [ script.execute: ui_refresh ] }
+
+  - platform: homeassistant
+    id: tile1_cover_position
+    entity_id: ${TILE1_ENTITY}
+    attribute: current_position
+    on_value: { then: [ script.execute: ui_refresh ] }
+
+  - platform: homeassistant
+    id: tile2_cover_position
+    entity_id: ${TILE2_ENTITY}
+    attribute: current_position
+    on_value: { then: [ script.execute: ui_refresh ] }
+
+  - platform: homeassistant
+    id: tile3_cover_position
+    entity_id: ${TILE3_ENTITY}
+    attribute: current_position
+    on_value: { then: [ script.execute: ui_refresh ] }
+
+  - platform: homeassistant
+    id: tile4_cover_position
+    entity_id: ${TILE4_ENTITY}
+    attribute: current_position
+    on_value: { then: [ script.execute: ui_refresh ] }
+
+  - platform: homeassistant
+    id: weather_temperature
+    entity_id: "weather.forecast_home"
+    attribute: temperature
+    on_value: { then: [ script.execute: ui_refresh ] }
+
+binary_sensor:
+  - platform: status
+    name: "Node Status"
+    id: system_status
+
+  - platform: homeassistant
+    id: ha_state_tile1
+    entity_id: ${TILE1_STATE_ENTITY}
+    on_state: { then: [ script.execute: ui_refresh ] }
+
+  - platform: homeassistant
+    id: ha_state_tile2
+    entity_id: ${TILE2_STATE_ENTITY}
+    on_state: { then: [ script.execute: ui_refresh ] }
+
+  - platform: homeassistant
+    id: ha_state_tile3
+    entity_id: ${TILE3_STATE_ENTITY}
+    on_state: { then: [ script.execute: ui_refresh ] }
+
+# ----------------------------------------------------------
+# Text sensors
+#
+# smartdisplay_action:
+# - Main touch event channel exported to Home Assistant
+# - On short tap, publishes one of:
+#     tile1_press / tile2_press / tile3_press / tile4_press
+# - The value is reset shortly after publishing
+#
+# tile*_preset:
+# - Mirrors the Home Assistant preset_mode attribute for each tile entity
+# - Used by the UI to display fan presets when applicable
+# ----------------------------------------------------------
+text_sensor:
+  - platform: template
+    id: smartdisplay_action
+    name: "SmartDisplay Action"
+    icon: mdi:gesture-tap-button
+
+  - platform: homeassistant
+    id: tile1_preset
+    entity_id: ${TILE1_ENTITY}
+    attribute: preset_mode
+    on_value: { then: [ script.execute: ui_refresh ] }
+
+  - platform: homeassistant
+    id: tile2_preset
+    entity_id: ${TILE2_ENTITY}
+    attribute: preset_mode
+    on_value: { then: [ script.execute: ui_refresh ] }
+
+  - platform: homeassistant
+    id: tile3_preset
+    entity_id: ${TILE3_ENTITY}
+    attribute: preset_mode
+    on_value: { then: [ script.execute: ui_refresh ] }
+
+  - platform: homeassistant
+    id: tile4_preset
+    entity_id: ${TILE4_ENTITY}
+    attribute: preset_mode
+    on_value: { then: [ script.execute: ui_refresh ] }
+
+  - platform: homeassistant
+    id: tile1_cover_state
+    entity_id: ${TILE1_STATE_ENTITY}
+    on_value: { then: [ script.execute: ui_refresh ] }
+
+  - platform: homeassistant
+    id: tile2_cover_state
+    entity_id: ${TILE2_STATE_ENTITY}
+    on_value: { then: [ script.execute: ui_refresh ] }
+
+  - platform: homeassistant
+    id: tile3_cover_state
+    entity_id: ${TILE3_STATE_ENTITY}
+    on_value: { then: [ script.execute: ui_refresh ] }
+
+  - platform: homeassistant
+    id: tile4_cover_state
+    entity_id: ${TILE4_STATE_ENTITY}
+    on_value: { then: [ script.execute: ui_refresh ] }
+
+  # Media player state — drives play/pause icon and row styling
+  - platform: homeassistant
+    id: media_player_state
+    entity_id: "${MEDIA_ENTITY}"
+    on_value: { then: [ script.execute: ui_refresh ] }
+
+  # Media player track info — shown in header when music is playing
+  - platform: homeassistant
+    id: media_title
+    entity_id: "${MEDIA_ENTITY}"
+    attribute: media_title
+    on_value: { then: [ script.execute: ui_refresh ] }
+
+  - platform: homeassistant
+    id: media_artist
+    entity_id: "${MEDIA_ENTITY}"
+    attribute: media_artist
+    on_value: { then: [ script.execute: ui_refresh ] }
+
+  # Weather condition state — drives the header weather icon
+  - platform: homeassistant
+    id: weather_condition
+    entity_id: "weather.forecast_home"
+    on_value: { then: [ script.execute: ui_refresh ] }
+
+  # Presence tracker — blanks screen when device is not home
+  - platform: homeassistant
+    id: presence_tracker
+    entity_id: "${PRESENCE_ENTITY}"
+    on_value:
+      - lambda: |-
+          bool home = (x == "${PRESENCE_ZONE}");
+          id(presence_home) = home;
+          if (!home) {
+            // Blank the screen and block tile touches with the overlay
+            id(back_light).turn_off().perform();
+            lv_obj_clear_flag(id(dim_wake_overlay), LV_OBJ_FLAG_HIDDEN);
+          } else {
+            // Restore full brightness and re-enable normal interaction
+            id(display_dimmed) = false;
+            id(last_touch_ms) = millis();
+            id(back_light).turn_on().set_brightness(atoi("${MAX_BRIGHTNESS}") / 100.0f).perform();
+            lv_obj_add_flag(id(dim_wake_overlay), LV_OBJ_FLAG_HIDDEN);
+          }
+

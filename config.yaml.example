@@ -1,0 +1,274 @@
+
+  ############################################################
+  # Copy to config.yaml and update the values for your setup.
+  #
+  # Minimal required changes in this file
+  # 1) Set TILE*_ENTITY and TILE*_STATE_ENTITY to your HA entities
+  # 2) Set MEDIA_ENTITY and PRESENCE_ENTITY (optional but recommended)
+  # 3) Verify ORIENTATION and touch calibration values for your display
+  #
+  # Optional changes
+  # - ROOM_NAME and TIME_24H
+  # - Tile titles, icons, colors, and long-press behavior
+  # - Dim/night behavior and media row colors
+  ############################################################
+
+  DIRECT_ACTIONS: "true"                                         # true = call Home Assistant services directly, false = only emit action events
+  ROOM_NAME:      "Living Room"                                  # room name shown in the top-left header
+  TIME_24H:       "true"                                         # true = 24h format, false = 12h format
+
+  ## DIM settings
+  AUTO_DIM:             "true"                                   # true = enable auto dimming
+  AUTO_DIM_TIMEOUT:     "10"                                     # seconds after last touch
+  MAX_BRIGHTNESS:       "100"                                    # backlight brightness in percent
+  DIM_BRIGHTNESS:       "100"                                    # dimmed backlight brightness in percent
+  NIGHT_MODE:           "true"                                   # true = use separate dim level at night
+  NIGHT_START_HOUR:     "22"                                     # 0-23
+  NIGHT_END_HOUR:       "7"                                      # 0-23
+  NIGHT_DIM_BRIGHTNESS: "18"                                     # backlight brightness in percent at night
+
+  # ============================================================
+  # FONT GLYPHS
+  # List every unique MDI icon used across your tiles — each value must appear exactly once.
+  # Reusing the same icon on multiple tiles is fine: just list that glyph once here.
+  # If you use fewer than 6 unique icons, leave the extra slots with their default values
+  # (unused glyphs add a few bytes to the font but cause no errors).
+  # ============================================================
+  MDI_GLYPH_1:     "\U000F0769"
+  MDI_GLYPH_2:     "\U000F06B5"
+  MDI_GLYPH_3:     "\U000F08DD"
+  MDI_GLYPH_4:     "\U000F050F"                                  # mdi:thermostat
+  MDI_MEDIA_PREV:  "\U000F04AE"                                  # mdi:skip-previous
+  MDI_MEDIA_PLAY:  "\U000F040A"                                  # mdi:play
+  MDI_MEDIA_PAUSE: "\U000F03E4"                                  # mdi:pause
+  MDI_MEDIA_NEXT:  "\U000F04AD"                                  # mdi:skip-next
+
+  # ============================================================
+  # TILE 1
+  # ============================================================
+
+  # --- basic settings ---
+  TILE1_ENTITY:       "light.example_light_1"                    # main Home Assistant entity for this tile
+  TILE1_STATE_ENTITY: "light.example_light_1"                    # entity used for active/inactive state styling
+  TILE1_TITLE:        "Main Light"                               # tile title shown in the UI
+  TILE1_ICON:         "\U000F0769"                               # MDI glyph — also add to MDI_GLYPH_* list above if not already there
+  TILE1_TYPE:         "light"                                    # tile type: light | fan | switch | scene | script | cover
+  TILE1_TAP_ACTION:   "auto"                                     # tap action: auto | toggle | activate | fan_toggle_preset | custom
+  TILE1_LONGPRESS:    "none"                                     # long press mode: none | slider | action
+  TILE1_VALUE_MODE:   "auto"                                     # value mode: auto | brightness | percentage | preset | text
+  TILE1_LABEL_OFF:    "Off"                                      # text shown when entity is off
+  TILE1_LABEL_ON:     "On"                                       # text shown for text-mode tiles when entity is on
+
+  # --- colors ---
+  TILE1_CIRCLE_ACTIVE_COLOR:   "0xFEC600"                        # icon circle color when active
+  TILE1_CIRCLE_DISABLED_COLOR: "0x7B7B6F"                        # icon circle color when inactive
+  TILE1_ICON_ACTIVE_COLOR:     "0xFFFFFF"                        # icon color when active
+  TILE1_ICON_DISABLED_COLOR:   "0xFEC600"                        # icon color when inactive
+  TILE1_BG_ACTIVE_COLOR:       "0xFFFFFF"                        # tile background color when active
+  TILE1_BG_DISABLED_COLOR:     "0x939391"                        # tile background color when inactive
+  TILE1_TITLE_ACTIVE_COLOR:    "0x000000"                        # title color when active
+  TILE1_TITLE_DISABLED_COLOR:  "0xFFFFFF"                        # title color when inactive
+  TILE1_VALUE_ACTIVE_COLOR:    "0x7A7A7C"                        # value color when active
+  TILE1_VALUE_DISABLED_COLOR:  "0xD9D9D9"                        # value color when inactive
+
+  # --- advanced settings ---
+  TILE1_TAP_SERVICE:   ""                                        # optional service override, e.g. light.toggle
+  TILE1_TAP_PARAM_KEY: ""                                        # optional extra service parameter key
+  TILE1_TAP_PARAM_VAL: ""                                        # optional extra service parameter value
+  # if LONGPRESS = slider:
+  TILE1_LONGPRESS_SLIDER:    "auto"                              # slider type: auto | brightness | percentage | cover_position
+  TILE1_LONGPRESS_OFF_VALUE: "0"                                 # initial slider value when entity is off
+  # if LONGPRESS = action:
+  TILE1_LONGPRESS_ACTION:         ""                             # entity_id to fire on long press
+  TILE1_LONGPRESS_ACTION_TYPE:    ""                             # entity type: light | fan | switch | scene | script | cover (empty = same as TILE*_TYPE)
+  TILE1_LONGPRESS_ACTION_SERVICE: ""                             # service to call (default: activate/turn_on — set e.g. "light.toggle" to toggle instead)
+
+
+  # ============================================================
+  # TILE 2
+  # ============================================================
+
+  # --- basic settings ---
+  TILE2_ENTITY:       "light.example_light_2"                    # main Home Assistant entity for this tile
+  TILE2_STATE_ENTITY: "light.example_light_2"                    # entity used for active/inactive state styling
+  TILE2_TITLE:        "Cabinet Light"                            # tile title shown in the UI
+  TILE2_ICON:         "\U000F06B5"                               # MDI glyph — also add to MDI_GLYPH_* list above if not already there
+  TILE2_TYPE:         "light"                                    # tile type: light | fan | switch | scene | script | cover
+  TILE2_TAP_ACTION:   "auto"                                     # tap action: auto | toggle | activate | fan_toggle_preset | custom
+  TILE2_LONGPRESS:    "none"                                     # long press mode: none | slider | action
+  TILE2_VALUE_MODE:   "auto"                                     # value mode: auto | brightness | percentage | preset | text
+  TILE2_LABEL_OFF:    "Off"                                      # text shown when entity is off
+  TILE2_LABEL_ON:     "On"                                       # text shown for text-mode tiles when entity is on
+
+  # --- colors ---
+  TILE2_CIRCLE_ACTIVE_COLOR:   "0xFEC600"                        # icon circle color when active
+  TILE2_CIRCLE_DISABLED_COLOR: "0x7B7B6F"                        # icon circle color when inactive
+  TILE2_ICON_ACTIVE_COLOR:     "0xFFFFFF"                        # icon color when active
+  TILE2_ICON_DISABLED_COLOR:   "0xFEC600"                        # icon color when inactive
+  TILE2_BG_ACTIVE_COLOR:       "0xFFFFFF"                        # tile background color when active
+  TILE2_BG_DISABLED_COLOR:     "0x939391"                        # tile background color when inactive
+  TILE2_TITLE_ACTIVE_COLOR:    "0x000000"                        # title color when active
+  TILE2_TITLE_DISABLED_COLOR:  "0xFFFFFF"                        # title color when inactive
+  TILE2_VALUE_ACTIVE_COLOR:    "0x7A7A7C"                        # value color when active
+  TILE2_VALUE_DISABLED_COLOR:  "0xD9D9D9"                        # value color when inactive
+
+  # --- advanced settings ---
+  TILE2_TAP_SERVICE:   ""                                        # optional service override, e.g. light.toggle
+  TILE2_TAP_PARAM_KEY: ""                                        # optional extra service parameter key
+  TILE2_TAP_PARAM_VAL: ""                                        # optional extra service parameter value
+  # if LONGPRESS = slider:
+  TILE2_LONGPRESS_SLIDER:    "auto"                              # slider type: auto | brightness | percentage | cover_position
+  TILE2_LONGPRESS_OFF_VALUE: "0"                                 # initial slider value when entity is off
+  # if LONGPRESS = action:
+  TILE2_LONGPRESS_ACTION:         ""                             # entity_id to fire on long press
+  TILE2_LONGPRESS_ACTION_TYPE:    ""                             # entity type: light | fan | switch | scene | script | cover (empty = same as TILE*_TYPE)
+  TILE2_LONGPRESS_ACTION_SERVICE: ""                             # service to call (default: activate/turn_on — set e.g. "light.toggle" to toggle instead)
+
+
+  # ============================================================
+  # TILE 3
+  # ============================================================
+
+  # --- basic settings ---
+  TILE3_ENTITY:       "light.example_light_3"                    # main Home Assistant entity for this tile
+  TILE3_STATE_ENTITY: "light.example_light_3"                    # entity used for active/inactive state styling
+  TILE3_TITLE:        "Floor lamp"                               # tile title shown in the UI
+  TILE3_ICON:         "\U000F08DD"                               # MDI glyph — also add to MDI_GLYPH_* list above if not already there
+  TILE3_TYPE:         "light"                                    # tile type: light | fan | switch | scene | script | cover
+  TILE3_TAP_ACTION:   "auto"                                     # tap action: auto | toggle | activate | fan_toggle_preset | custom
+  TILE3_LONGPRESS:    "none"                                     # long press mode: none | slider | action
+  TILE3_VALUE_MODE:   "auto"                                     # value mode: auto | brightness | percentage | preset | text
+  TILE3_LABEL_OFF:    "Off"                                      # text shown when entity is off
+  TILE3_LABEL_ON:     "On"                                       # text shown for text-mode tiles when entity is on
+
+  # --- colors ---
+  TILE3_CIRCLE_ACTIVE_COLOR:   "0xFEC600"                        # icon circle color when active
+  TILE3_CIRCLE_DISABLED_COLOR: "0x7B7B6F"                        # icon circle color when inactive
+  TILE3_ICON_ACTIVE_COLOR:     "0xFFFFFF"                        # icon color when active
+  TILE3_ICON_DISABLED_COLOR:   "0xFEC600"                        # icon color when inactive
+  TILE3_BG_ACTIVE_COLOR:       "0xFFFFFF"                        # tile background color when active
+  TILE3_BG_DISABLED_COLOR:     "0x939391"                        # tile background color when inactive
+  TILE3_TITLE_ACTIVE_COLOR:    "0x000000"                        # title color when active
+  TILE3_TITLE_DISABLED_COLOR:  "0xFFFFFF"                        # title color when inactive
+  TILE3_VALUE_ACTIVE_COLOR:    "0x7A7A7C"                        # value color when active
+  TILE3_VALUE_DISABLED_COLOR:  "0xD9D9D9"                        # value color when inactive
+
+  # --- advanced settings ---
+  TILE3_TAP_SERVICE:   ""                                        # optional service override, e.g. light.toggle
+  TILE3_TAP_PARAM_KEY: ""                                        # optional extra service parameter key
+  TILE3_TAP_PARAM_VAL: ""                                        # optional extra service parameter value
+  # if LONGPRESS = slider:
+  TILE3_LONGPRESS_SLIDER:    "auto"                              # slider type: auto | brightness | percentage | cover_position
+  TILE3_LONGPRESS_OFF_VALUE: "0"                                 # initial slider value when entity is off
+  # if LONGPRESS = action:
+  TILE3_LONGPRESS_ACTION:         ""                             # entity_id to fire on long press
+  TILE3_LONGPRESS_ACTION_TYPE:    ""                             # entity type: light | fan | switch | scene | script | cover (empty = same as TILE*_TYPE)
+  TILE3_LONGPRESS_ACTION_SERVICE: ""                             # service to call (default: activate/turn_on — set e.g. "light.toggle" to toggle instead)
+
+
+  # ============================================================
+  # TILE 4  — Thermostat (climate)
+  # ============================================================
+
+  # --- basic settings ---
+  TILE4_ENTITY:              "climate.example_thermostat"        # thermostat entity
+  TILE4_STATE_ENTITY:        "climate.example_thermostat"        # same entity — state drives active styling
+  TILE4_TITLE:               "Thermostat"                        # tile title shown in the UI
+  TILE4_ICON:                "\U000F050F"                        # mdi:thermostat — update MDI_GLYPH_4 above to match
+  TILE4_TYPE:                "climate"                           # tile type: climate (custom extension)
+  TILE4_TAP_ACTION:          "auto"                              # auto → toggle for climate: off↔heat
+  TILE4_LONGPRESS:           "slider"                            # long press opens temperature setpoint slider
+  TILE4_VALUE_MODE:          "auto"                              # auto → climate_temperature: shows current→target
+  TILE4_LABEL_OFF:           "Off"                               # text shown when thermostat is off
+  TILE4_LABEL_ON:            "Heat"                              # text shown when thermostat is active
+  TILE4_HVAC_MODE:           "heat"                              # hvac_mode used when turning the thermostat on
+  TILE4_TEMP_MIN:            "5"                                 # slider minimum temperature (°C)
+  TILE4_TEMP_MAX:            "25"                                # slider maximum temperature (°C)
+  TILE4_LONGPRESS_OFF_VALUE: "20"                                # fallback slider value (°C) when no setpoint is available
+
+  # --- colors (deep orange = heating) ---
+  TILE4_CIRCLE_ACTIVE_COLOR:   "0xFF5722"                        # icon circle color when heating
+  TILE4_CIRCLE_DISABLED_COLOR: "0x7B7B6F"                        # icon circle color when off
+  TILE4_ICON_ACTIVE_COLOR:     "0xFFFFFF"                        # icon color when heating
+  TILE4_ICON_DISABLED_COLOR:   "0xFF5722"                        # icon color when off
+  TILE4_BG_ACTIVE_COLOR:       "0xFFFFFF"                        # tile background when heating
+  TILE4_BG_DISABLED_COLOR:     "0x939391"                        # tile background when off
+  TILE4_TITLE_ACTIVE_COLOR:    "0x000000"                        # title color when heating
+  TILE4_TITLE_DISABLED_COLOR:  "0xFFFFFF"                        # title color when off
+  TILE4_VALUE_ACTIVE_COLOR:    "0x7A7A7C"                        # value color when heating
+  TILE4_VALUE_DISABLED_COLOR:  "0xD9D9D9"                        # value color when off
+
+  # --- advanced settings ---
+  TILE4_TAP_SERVICE:   ""                                        # leave blank — do_tile_action handles climate toggle
+  TILE4_TAP_PARAM_KEY: "hvac_mode"                               # used by do_tile_action when activating climate
+  TILE4_TAP_PARAM_VAL: "heat"                                    # hvac_mode to set when turning on (matches TILE4_HVAC_MODE)
+  # if LONGPRESS = slider:
+  TILE4_LONGPRESS_SLIDER: "temperature"                          # temperature mode — sets climate target setpoint
+  # if LONGPRESS = action:
+  TILE4_LONGPRESS_ACTION:         ""                             # not used
+  TILE4_LONGPRESS_ACTION_TYPE:    ""                             # not used
+  TILE4_LONGPRESS_ACTION_SERVICE: ""                             # not used
+
+  # ============================================================
+  # PRESENCE
+  # Controls when the display should be blanked based on location.
+  # ============================================================
+  PRESENCE_ENTITY: "device_tracker.example_phone"                # Home Assistant device_tracker used for presence
+  PRESENCE_ZONE:   "home"                                        # zone/state that is treated as home
+
+  # ============================================================
+  # MEDIA PLAYER ROW
+  # Bottom row is divided into 3 equal control buttons:
+  #   Previous Track | Play/Pause (icon changes with state) | Next Track
+  # ============================================================
+  MEDIA_ENTITY:                "media_player.example_speaker"    # media player entity for the bottom row
+  MEDIA_BG_ACTIVE_COLOR:       "0xFFFFFF"                        # button background when playing
+  MEDIA_BG_INACTIVE_COLOR:     "0x939391"                        # button background when not playing
+  MEDIA_CIRCLE_ACTIVE_COLOR:   "0x1DB954"                        # icon circle color when playing (green)
+  MEDIA_CIRCLE_INACTIVE_COLOR: "0x7B7B6F"                        # icon circle color when not playing
+  MEDIA_ICON_ACTIVE_COLOR:     "0xFFFFFF"                        # icon color when playing
+  MEDIA_ICON_INACTIVE_COLOR:   "0x1DB954"                        # icon color when not playing
+
+  # ============================================================
+  # ORIENTATION / LAYOUT
+  # Uncomment ONE preset block below, comment out the others.
+  # Touch calibration values (TOUCH_CAL_*) are device-specific —
+  # portrait/flipped values are approximate and may need tuning.
+  #
+  # Tile content layout:
+  #   Landscape — icon left, title + value to its right
+  #   Portrait  — icon centered on top, title + value stacked below
+  # ============================================================
+
+  # ----- 0° — Landscape 320×240 (default, USB on right) -----
+  ORIENTATION:      "0"
+  DISPLAY_W:        "320"
+  DISPLAY_H:        "240"
+  DISPLAY_SWAP_XY:  "true"
+  DISPLAY_MIRROR_X: "false"
+  DISPLAY_MIRROR_Y: "false"
+  TOUCH_SWAP_XY:    "true"
+  TOUCH_MIRROR_X:   "false"
+  TOUCH_MIRROR_Y:   "false"
+  TOUCH_CAL_X_MIN:  "280"
+  TOUCH_CAL_X_MAX:  "3860"
+  TOUCH_CAL_Y_MIN:  "340"
+  TOUCH_CAL_Y_MAX:  "3860"
+  GRID_COL1_X:      "9"
+  GRID_COL2_X:      "164"
+  GRID_ROW1_Y:      "54"
+  GRID_ROW2_Y:      "114"
+  GRID_ROW3_Y:      "174"
+  TILE_W:           "147"
+  TILE_H:           "52"
+  HEADER_Y:         "14"
+  OVERLAY_SLIDER_W: "96"
+  OVERLAY_SLIDER_H: "160"
+  BG_IMAGE:         "images/smartdisplay_background.png"
+  TILE_ICON_X:      "0"
+  TILE_ICON_Y:      "0"
+  TILE_TITLE_X:     "48"
+  TILE_TITLE_Y:     "4"
+  TILE_VALUE_X:     "48"
+  TILE_VALUE_Y:     "18"
+
