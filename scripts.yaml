@@ -175,6 +175,17 @@ script:
                                   data:
                                     entity_id: !lambda "return id(active_entity);"
                                     temperature: !lambda "return (float)value;"
+                            else:
+                              - if:
+                                  condition:
+                                    lambda: |-
+                                      return id(active_control_kind) == "media_player_volume";
+                                  then:
+                                    - homeassistant.action:
+                                        action: media_player.volume_set
+                                        data:
+                                          entity_id: !lambda "return id(active_entity);"
+                                          volume_level: !lambda "return value / 100.0f;"
 
   # ----------------------------------------------------------
   # do_tile_action
@@ -603,6 +614,57 @@ script:
 
       - lvgl.widget.show: brightness_overlay
 
+  # ----------------------------------------------------------
+  # open_volume_overlay — open the value slider overlay configured for the
+  # media player volume (volume_level 0.0-1.0 mapped to a 0-100 slider).
+  # Reuses the same brightness_overlay widget; slider_commit sends
+  # media_player.volume_set when active_control_kind == "media_player_volume".
+  # ----------------------------------------------------------
+  - id: open_volume_overlay
+    parameters:
+      volume_value: float
+    then:
+      - lambda: |-
+          id(active_entity) = "${MEDIA_ENTITY}";
+          id(active_control_kind) = "media_player_volume";
+          id(active_value_suffix) = " %";
+          id(active_label_off) = "Muted";
+          id(active_label_on) = "";
+
+          int pct;
+          if (isnan(volume_value)) pct = 0;
+          else pct = (int) lround(volume_value * 100.0f);
+          if (pct < 0) pct = 0;
+          if (pct > 100) pct = 100;
+
+          lv_slider_set_range(id(overlay_slider), 0, 100);
+
+          lv_obj_set_style_bg_color(id(overlay_slider), lv_color_hex(0x939391), LV_PART_MAIN);
+          lv_obj_set_style_bg_color(id(overlay_slider), lv_color_hex(${MEDIA_CIRCLE_ACTIVE_COLOR}), LV_PART_INDICATOR);
+          lv_obj_set_style_bg_opa(id(overlay_slider), LV_OPA_COVER, LV_PART_MAIN);
+          lv_obj_set_style_radius(id(overlay_slider), 28, LV_PART_MAIN);
+          lv_obj_set_style_radius(id(overlay_slider), 0, LV_PART_INDICATOR);
+
+          lv_label_set_text(id(overlay_title), "${MEDIA_VOLUME_TITLE}");
+          lv_label_set_text(id(overlay_icon), "${MDI_MEDIA_VOLUME}");
+          lv_slider_set_value(id(overlay_slider), pct, LV_ANIM_OFF);
+
+          std::string value_text;
+          if (pct <= 0) {
+            value_text = id(active_label_off).c_str();
+          } else {
+            char buf[20];
+            snprintf(buf, sizeof(buf), "%d%s", pct, id(active_value_suffix).c_str());
+            value_text = buf;
+          }
+          lv_label_set_text(id(overlay_value), value_text.c_str());
+
+          lv_obj_set_style_bg_opa(id(overlay_slider), LV_OPA_COVER, LV_PART_INDICATOR);
+          lv_obj_set_style_text_color(id(overlay_icon), lv_color_hex(0xFFFFFF), 0);
+
+      - lvgl.widget.show: brightness_overlay
+
+
   # UI refresh (values + time + styles) + render
   - id: ui_refresh
     mode: queued
@@ -816,6 +878,11 @@ script:
           uint32_t mp_bg     = mp_playing ? ${MEDIA_BG_ACTIVE_COLOR}     : ${MEDIA_BG_INACTIVE_COLOR};
           uint32_t mp_circle = mp_playing ? ${MEDIA_CIRCLE_ACTIVE_COLOR} : ${MEDIA_CIRCLE_INACTIVE_COLOR};
           uint32_t mp_icon   = mp_playing ? ${MEDIA_ICON_ACTIVE_COLOR}   : ${MEDIA_ICON_INACTIVE_COLOR};
+
+          // Volume button
+          lv_obj_set_style_bg_color(id(media_volume_btn),    lv_color_hex(mp_bg),     0);
+          lv_obj_set_style_bg_color(id(media_volume_circle), lv_color_hex(mp_circle), 0);
+          lv_obj_set_style_text_color(id(media_volume_icon), lv_color_hex(mp_icon),   0);
 
           // Previous track button
           lv_obj_set_style_bg_color(id(media_prev_btn),    lv_color_hex(mp_bg),     0);

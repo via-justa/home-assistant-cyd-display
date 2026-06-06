@@ -17,6 +17,7 @@
   ROOM_NAME:      "Living Room"                                  # room name shown in the top-left header
   TIME_24H:       "true"                                         # true = 24h format, false = 12h format
   DEBUG_TOOLS:    "false"                                        # true = enable web server + on-device screenshot capture (extra flash/RAM); false = disabled
+  TOUCH_LOG_LEVEL: "INFO"                                       # XPT2046 touchscreen log level (DEBUG = log every touch coordinate; INFO = quiet)
 
   ## DIM settings
   AUTO_DIM:             "true"                                   # true = enable auto dimming
@@ -43,6 +44,7 @@
   MDI_MEDIA_PLAY:  "\U000F040A"                                  # mdi:play
   MDI_MEDIA_PAUSE: "\U000F03E4"                                  # mdi:pause
   MDI_MEDIA_NEXT:  "\U000F04AD"                                  # mdi:skip-next
+  MDI_MEDIA_VOLUME: "\U000F057E"                                 # mdi:volume-high
 
   # ============================================================
   # TILE 1
@@ -219,10 +221,11 @@
 
   # ============================================================
   # MEDIA PLAYER ROW
-  # Bottom row is divided into 3 equal control buttons:
-  #   Previous Track | Play/Pause (icon changes with state) | Next Track
+  # Bottom row is divided into 4 equal control buttons:
+  #   Volume | Previous Track | Play/Pause (icon changes with state) | Next Track
   # ============================================================
   MEDIA_ENTITY:                "media_player.example_speaker"    # media player entity for the bottom row
+  MEDIA_VOLUME_TITLE:          "Volume"                          # title shown in the volume overlay
   MEDIA_BG_ACTIVE_COLOR:       "0xFFFFFF"                        # button background when playing
   MEDIA_BG_INACTIVE_COLOR:     "0x939391"                        # button background when not playing
   MEDIA_CIRCLE_ACTIVE_COLOR:   "0x1DB954"                        # icon circle color when playing (green)

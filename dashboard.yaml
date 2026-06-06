@@ -40,6 +40,8 @@ esp32:
       sram1_as_iram: true
 
 logger:
+  logs:
+    xpt2046: ${TOUCH_LOG_LEVEL}
 
 # Credentials are loaded from secrets.yaml — copy secrets.yaml.example to secrets.yaml and fill in your values.
 api:

@@ -1,0 +1,13 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "esphome": true,
+        "/^source ~/esphome-venv/bin/activate && esphome config dashboard\\.yaml 2>&1 \\| tail -\\d$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^source ~/esphome-venv/bin/activate && esphome config dashboard\\.yaml 2>&1 \\| tail -\\d && git diff --stat$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}

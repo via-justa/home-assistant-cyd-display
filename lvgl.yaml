@@ -9,7 +9,7 @@ font:
     id: headline
     size: 18
     bpp: 4
-    glyphs: ['&','@','!',',','.','?','"','%','(',')','+','-','_',':','°',
+    glyphs: ['&','@','!',',','.','?','"','%','(',')','+','-','_',':','°',"'",'’',
              '0','1','2','3','4','5','6','7','8','9',
              'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
              ' ','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
@@ -20,7 +20,7 @@ font:
     id: label
     size: 11
     bpp: 4
-    glyphs: ['&','@','!',',','.','?','"','%','(',')','+','-','_',':','°',
+    glyphs: ['&','@','!',',','.','?','"','%','(',')','+','-','_',':','°',"'",'’',
              '0','1','2','3','4','5','6','7','8','9',
              'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
              ' ','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
@@ -31,7 +31,7 @@ font:
     id: sublabel
     size: 11
     bpp: 4
-    glyphs: ['&','@','!',',','.','?','"','%','(',')','+','-','_',':','°',
+    glyphs: ['&','@','!',',','.','?','"','%','(',')','+','-','_',':','°',"'",'’',
              '0','1','2','3','4','5','6','7','8','9',
              'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
              ' ','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
@@ -42,7 +42,7 @@ font:
     id: sublabel_big
     size: 14
     bpp: 4
-    glyphs: ['&','@','!',',','.','?','"','%','(',')','+','-','_',':','°',
+    glyphs: ['&','@','!',',','.','?','"','%','(',')','+','-','_',':','°',"'",'’',
              '0','1','2','3','4','5','6','7','8','9',
              'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
              ' ','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
@@ -63,6 +63,7 @@ font:
       - "${MDI_MEDIA_PLAY}"
       - "${MDI_MEDIA_PAUSE}"
       - "${MDI_MEDIA_NEXT}"
+      - "${MDI_MEDIA_VOLUME}"
 
   # Small MDI font used for the play indicator in the header
   - file: 'fonts/materialdesignicons-webfont.ttf'
@@ -661,16 +662,50 @@ lvgl:
                               label_on: "${TILE4_LABEL_ON}"
 
         # ---------- MEDIA PLAYER ROW ----------
-        # Three equal buttons span the full bottom row (landscape: x=9..311 = 302px)
-        # Each button is 96px wide with 7px gaps: x=9 | x=112 | x=215
+        # Four equal buttons span the full bottom row (landscape: x=9..311 = 302px)
+        # Each button is 71px wide with 6px gaps: x=9 | x=86 | x=163 | x=240
         # Icon circle is centered; icon changes for play/pause based on media player state.
+
+        # --- Volume (opens the volume slider overlay) ---
+        - obj:
+            id: media_volume_btn
+            x: 9
+            y: ${GRID_ROW3_Y}
+            width: 71
+            height: ${TILE_H}
+            styles: style_tile
+            scrollable: false
+            scrollbar_mode: 'OFF'
+            widgets:
+              - obj:
+                  id: media_volume_circle
+                  align: CENTER
+                  width: 36
+                  height: 36
+                  styles: style_icon_circle
+                  clickable: false
+                  scrollable: false
+                  scrollbar_mode: 'OFF'
+                  widgets:
+                    - label:
+                        id: media_volume_icon
+                        align: CENTER
+                        text_font: materialdesign_icons
+                        text_color: 0xFFFFFF
+                        text: "${MDI_MEDIA_VOLUME}"
+                        clickable: false
+            on_short_click:
+              - script.execute: { id: publish_action, action: "media_volume_press" }
+              - script.execute:
+                  id: open_volume_overlay
+                  volume_value: !lambda "return id(media_volume_level).state;"
 
         # --- Previous Track ---
         - obj:
             id: media_prev_btn
-            x: 9
+            x: 86
             y: ${GRID_ROW3_Y}
-            width: 96
+            width: 71
             height: ${TILE_H}
             styles: style_tile
             scrollable: false
@@ -707,9 +742,9 @@ lvgl:
         # --- Play / Pause (icon switches based on media player state) ---
         - obj:
             id: media_play_btn
-            x: 112
+            x: 163
             y: ${GRID_ROW3_Y}
-            width: 96
+            width: 71
             height: ${TILE_H}
             styles: style_tile
             scrollable: false
@@ -746,9 +781,9 @@ lvgl:
         # --- Next Track ---
         - obj:
             id: media_next_btn
-            x: 215
+            x: 240
             y: ${GRID_ROW3_Y}
-            width: 96
+            width: 71
             height: ${TILE_H}
             styles: style_tile
             scrollable: false

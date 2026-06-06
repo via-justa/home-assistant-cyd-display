@@ -87,6 +87,12 @@ sensor:
     attribute: temperature
     on_value: { then: [ script.execute: ui_refresh ] }
 
+  # Media player volume level (0.0–1.0) — read when opening the volume overlay
+  - platform: homeassistant
+    id: media_volume_level
+    entity_id: "${MEDIA_ENTITY}"
+    attribute: volume_level
+
 binary_sensor:
   - platform: status
     name: "Node Status"
