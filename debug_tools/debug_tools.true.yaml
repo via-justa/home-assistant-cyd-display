@@ -1,0 +1,28 @@
+############################################################
+# Optional debug / development tools (enabled when DEBUG_TOOLS: "true")
+# - external_components: loads the local display_capture component
+# - display_capture:     on-device screenshot capture
+# - web_server:          built-in HTTP server on port 80
+# These add flash/RAM usage and expose an unauthenticated web server, so they
+# are disabled by default. Selected via: !include debug_tools.${DEBUG_TOOLS}.yaml
+############################################################
+
+external_components:
+  - source: components
+
+display_capture:
+  id: screenshot_capture
+  display_id: my_display
+  backend: lvgl
+  scale: 2
+
+# Register the screenshot capture surface as an extra LVGL display so the UI is
+# rendered to it. Concatenated onto lvgl.displays (defined in lvgl.yaml) only
+# when debug tools are enabled.
+lvgl:
+  displays:
+    - screenshot_capture
+
+web_server:
+  id: web_server_main
+  port: 80

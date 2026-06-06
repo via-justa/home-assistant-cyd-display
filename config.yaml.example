@@ -16,6 +16,7 @@
   DIRECT_ACTIONS: "true"                                         # true = call Home Assistant services directly, false = only emit action events
   ROOM_NAME:      "Living Room"                                  # room name shown in the top-left header
   TIME_24H:       "true"                                         # true = 24h format, false = 12h format
+  DEBUG_TOOLS:    "false"                                        # true = enable web server + on-device screenshot capture (extra flash/RAM); false = disabled
 
   ## DIM settings
   AUTO_DIM:             "true"                                   # true = enable auto dimming

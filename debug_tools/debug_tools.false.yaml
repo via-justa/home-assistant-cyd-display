@@ -1,0 +1,3 @@
+# Debug tools disabled (DEBUG_TOOLS: "false"). Empty placeholder package so the
+# !include debug_tools.${DEBUG_TOOLS}.yaml in dashboard.yaml resolves to nothing.
+{}

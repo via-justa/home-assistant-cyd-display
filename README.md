@@ -16,6 +16,8 @@ ESPHome configuration for a Cheap Yellow Display (ESP32-2432S028) with an LVGL s
 - Header with room name (changed to playing track when playing), weather icon + temperature, and clock
 - Auto-dim and night dim behavior
 - Presence-based screen blanking to reduce electricity consumption and reduce the chance of pixel burn.
+- Bidirectional text support (e.g. Hebrew) using local Heebo fonts
+- Optional debug tools (web server + on-device screenshot capture), gated by a flag
 
 ## Project Structure
 - `dashboard.yaml`: main config (system + hardware + package includes)
@@ -24,8 +26,11 @@ ESPHome configuration for a Cheap Yellow Display (ESP32-2432S028) with an LVGL s
 - `sensors.yaml`: sensor, binary_sensor, text_sensor
 - `lvgl.yaml`: fonts, image, and LVGL UI
 - `scripts.yaml`: all automation and UI logic scripts
+- `debug_tools/`: optional debug package (web server + screenshot capture), toggled by the `DEBUG_TOOLS` flag
+- `components/display_capture`: local external component for on-device screenshots
 - `fonts`: containing required font binaries
 - `images`: containing background image
+- `AGENTS.md`: guidance for AI coding agents working in this repo
 
 ## Requirements
 - ESPHome (CLI)
@@ -44,6 +49,7 @@ ESPHome configuration for a Cheap Yellow Display (ESP32-2432S028) with an LVGL s
 ## Notes
 - `secrets.yaml` is intentionally gitignored.
 - Validate from `dashboard.yaml` (split files are package fragments).
+- Enable optional debug tools by setting `DEBUG_TOOLS: "true"` in `config.yaml` (defaults to `"false"`).
 
 ## License
 MIT. See `LICENSE`.
